@@ -1,0 +1,30 @@
+<div class="error" style="display:none;">
+	<p class="text-danger"><strong>Sorry, you do not have access to this page.</strong></p>
+</div>
+
+<div class="main">
+    <a href="#/users/admin/0">ADD NEW USER</a> 
+
+    <div class="table-responsive">
+        <table id="admin-user-table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-muted">LDAP NAME</th>
+                    <th class="text-muted">EMAIL</th>
+                    <th class="text-muted">LAST ACCESS</th>
+                    <th class="text-muted">EDIT LINK</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% _.each(models,function(user) { %>
+                <tr>
+                    <td><%= user.get("name") %></td>
+                    <td><%= user.get("email") %></td>
+                    <td><%= window.formatDateTime(user.get("last_access_date")) %></td>
+                    <td><a href="#/users/admin/<%= user.attributes.id %>">Edit</a></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>

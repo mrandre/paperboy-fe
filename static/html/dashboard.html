@@ -1,0 +1,463 @@
+<div class="col-lg-9 col-md-9">
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-heading">SUBSCRIBERS</div>
+			<div class="panel-body" style="text-align:center;">
+				<div class="col-lg-6 col-md-6">
+					<p class="text-muted"><strong>TOTAL SUBSCRIBERS</strong></p>
+					<%
+					var badge_class = "success";
+					var sign = "+";
+					if(subscriptions.subscriber_diff < 0){
+						badge_class = "danger";
+						sign = "";
+					} 
+					else if(subscriptions.subscriber_diff < 1000) {
+						badge_class = "warning";
+					}
+					%>					
+					<h2 class="text-primary" style="margin-top:0;"><%= window.numberWithCommas(subscriptions.current.subscribers) %> <span class="badge <%= badge_class %> has-tip" title="vs end of last month (<%= window.numberWithCommas(subscriptions.end_of_last_month.subscribers) %>)"><%= sign %><%= window.numberWithCommas(subscriptions.subscriber_diff) %></span></h2>
+				</div>
+				
+				<div class="col-lg-6 col-md-6">
+					<p class="text-muted"><strong>TOTAL SUBSCRIPTIONS</strong></p>
+					<%
+					badge_class = "success";
+					sign = "+";
+					if(subscriptions.subscription_diff < 0){
+						badge_class = "danger";
+						sign = "";						
+					} 
+					else if(subscriptions.subscription_diff < 1000) {
+						badge_class = "warning";
+					}
+					%>
+					<h2 class="text-primary" style="margin-top:0;"><%= window.numberWithCommas(subscriptions.current.subscriptions) %> <span class="badge <%= badge_class %> has-tip" title="vs end of last month (<%= window.numberWithCommas(subscriptions.end_of_last_month.subscriptions) %>)"><%= sign %><%= window.numberWithCommas(subscriptions.subscription_diff) %></span></h2>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4 col-md-4" style="padding:0 10px 0 0;height:1100px">
+			<div class="panel panel-default">
+				<div class="panel-heading">DELIVERY</div>
+				<div class="panel-body" style="text-align:center;">
+					<p class="text-muted" style="margin-bottom:0">TODAY</p>
+					<h5 style="margin:0 0 5px 0;"><%= window.numberWithCommas(delivery.today.sent) %> Sent</h5>
+					<h5 class="text-success" style="margin:0 0 5px 0;"><%= window.numberWithCommas(delivery.today.delivered) %> Delivered</h5>
+					<h5 class="text-danger" style="margin-top:0;"><%= window.numberWithCommas(delivery.today.bounced) %> Bounced</h5>					
+					<div id="todays-sent-pie" style="width:280px;height:200px"></div>
+					<hr style="margin-top:0;"/>
+
+					<p class="text-muted" style="margin-bottom:0">LAST 30 DAYS</h5>
+					<h5 style="margin:0 0 5px 0;"><%= window.numberWithCommas(delivery.thirty_days.sent) %> Sent</h5>
+					<h5 class="text-success" style="margin:0 0 5px 0;"><%= window.numberWithCommas(delivery.thirty_days.delivered) %> Delivered</h5>
+					<h5 class="text-danger" style="margin-top:0;"><%= window.numberWithCommas(delivery.thirty_days.bounced) %> Bounced</h5>	
+					<div id="30day-sent-pie" style="width:280px;height:200px"></div>
+					<hr style="margin-top:0;"/>
+					
+					<p class="text-muted" style="margin-bottom:0">YTD</p>
+					<h5 style="margin:0 0 5px 0;"><%= window.numberWithCommas(delivery.ytd.sent) %> Sent</h5>
+					<h5 class="text-success" style="margin:0 0 5px 0;"><%= window.numberWithCommas(delivery.ytd.delivered) %> Delivered</h5>
+					<h5 class="text-danger" style="margin-top:0;"><%= window.numberWithCommas(delivery.ytd.bounced) %> Bounced</h5>	
+					<div id="ytd-sent-pie" style="width:280px;height:200px"></div>										
+				</div>
+			</div>
+		</div>
+<% if("total" in rates){ %>
+		<div class="col-lg-8 col-md-8" style="padding:0;">
+			<div class="panel panel-default">
+				<div class="panel-heading">ALL CAMPAIGNS <small>(LAST 30 DAYS)</small></div>							
+				<div class="panel-body" style="text-align:center;">
+					<div class="col-lg-3  col-md-3">
+						<p class="text-muted">OPENS</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.total.opens) %> Opens / <%= window.numberWithCommas(rates.total.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.total.open_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3  col-md-3">
+						<p class="text-muted">UNSUBSCRIBES</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.total.unsubscribes) %> Unsubs / <%= window.numberWithCommas(rates.total.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.total.unsubscribe_rate.toFixed(2) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3  col-md-3">
+						<p class="text-muted">CLICK THRU</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.total.clicks) %> Clicks / <%= window.numberWithCommas(rates.total.delivered) %> Delivered " style="margin-top:0;">
+							<%= rates.total.click_thru_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3  col-md-3">
+						<p class="text-muted">CLICK TO OPEN</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.total.clicks) %> Clicks / <%= window.numberWithCommas(rates.total.opens) %> Opens" style="margin-top:0;">
+							<%= rates.total.click_to_open_rate.toFixed(1) %>%
+						</h2>						
+					</div>		
+				</div>
+			</div>
+		</div>
+<% } %>
+
+<% if("editorial" in rates){ %>
+		<div class="col-lg-8 col-md-8" style="padding:0;">
+			<div class="panel panel-default">
+				<div class="panel-heading">EDITORIAL CAMPAIGNS <small>(LAST 30 DAYS)</small></div>							
+				<div class="panel-body" style="text-align:center;">
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">OPENS</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial.opens) %> Opens / <%= window.numberWithCommas(rates.editorial.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.editorial.open_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">UNSUBSCRIBES</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial.unsubscribes) %> Unsubs / <%= window.numberWithCommas(rates.editorial.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.editorial.unsubscribe_rate.toFixed(2) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK THRU</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial.clicks) %> Clicks / <%= window.numberWithCommas(rates.editorial.delivered) %> Delivered " style="margin-top:0;">
+							<%= rates.editorial.click_thru_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK TO OPEN</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial.clicks) %> Clicks / <%= window.numberWithCommas(rates.editorial.opens) %> Opens" style="margin-top:0;">
+							<%= rates.editorial.click_to_open_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					
+					<div class="clearfix"></div>
+					<hr style="margin-top:0;margin-bottom:0;"/>
+					
+					<h6 class="text-muted" style="margin-bottom:10px;margin-top:5px;">DAILY CAMPAIGNS</h6>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">OPENS</p>
+						<h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial_daily.opens) %> Opens / <%= window.numberWithCommas(rates.editorial_daily.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.editorial_daily.open_rate.toFixed(1) %>%
+						</h4>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">UNSUBSCRIBES</p>
+						<h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial_daily.unsubscribes) %> Unsubs / <%= window.numberWithCommas(rates.editorial_daily.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.editorial_daily.unsubscribe_rate.toFixed(2) %>%
+						</h4>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK THRU</p>
+						<h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial_daily.clicks) %> Clicks / <%= window.numberWithCommas(rates.editorial_daily.delivered) %> Delivered " style="margin-top:0;">
+							<%= rates.editorial_daily.click_thru_rate.toFixed(1) %>%
+						</h4>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK TO OPEN</p>
+						<h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial_daily.clicks) %> Clicks / <%= window.numberWithCommas(rates.editorial_daily.opens) %> Opens" style="margin-top:0;">
+							<%= rates.editorial_daily.click_to_open_rate.toFixed(1) %>%
+						</h4>						
+					</div>
+					
+					
+					<div class="clearfix"></div>
+					<hr style="margin-top:0;margin-bottom:0;"/>
+					
+					<h6 class="text-muted" style="margin-bottom:10px;margin-top:5px;">WEEKLY CAMPAIGNS</h6>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">OPENS</p>
+						<h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial_weekly.opens) %> Opens / <%= window.numberWithCommas(rates.editorial_weekly.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.editorial_weekly.open_rate.toFixed(1) %>%
+						</h4>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">UNSUBSCRIBES</p>
+						<h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial_weekly.unsubscribes) %> Unsubs / <%= window.numberWithCommas(rates.editorial_weekly.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.editorial_weekly.unsubscribe_rate.toFixed(2) %>%
+						</h4>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK THRU</p>
+						<h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial_weekly.clicks) %> Clicks / <%= window.numberWithCommas(rates.editorial_weekly.delivered) %> Delivered " style="margin-top:0;">
+							<%= rates.editorial_weekly.click_thru_rate.toFixed(1) %>%
+						</h4>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK TO OPEN</p>
+						<h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.editorial_weekly.clicks) %> Clicks / <%= window.numberWithCommas(rates.editorial_weekly.opens) %> Opens" style="margin-top:0;">
+							<%= rates.editorial_weekly.click_to_open_rate.toFixed(1) %>%
+						</h4>						
+					</div>																			
+				</div>
+			</div>
+		</div>
+<% } %>	
+
+<% if("admail" in rates){ %>
+		<div class="col-lg-8 col-md-8" style="padding:0;">
+			<div class="panel panel-default">
+				<div class="panel-heading">ADMAIL CAMPAIGNS <small>(LAST 30 DAYS)</small></div>							
+				<div class="panel-body" style="text-align:center;">
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">OPENS</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.admail.opens) %> Opens / <%= window.numberWithCommas(rates.admail.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.admail.open_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">UNSUBSCRIBES</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.admail.unsubscribes) %> Unsubs / <%= window.numberWithCommas(rates.admail.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.admail.unsubscribe_rate.toFixed(2) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK THRU</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.admail.clicks) %> Clicks / <%= window.numberWithCommas(rates.admail.delivered) %> Delivered " style="margin-top:0;">
+							<%= rates.admail.click_thru_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK TO OPEN</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.admail.clicks) %> Clicks / <%= window.numberWithCommas(rates.admail.opens) %> Opens" style="margin-top:0;">
+							<%= rates.admail.click_to_open_rate.toFixed(1) %>%
+						</h2>						
+					</div>		
+				</div>
+			</div>
+		</div>
+<% } %>
+
+<% if("breaking_news" in rates){ %>
+		<div class="col-lg-8 col-md-8" style="padding:0;">
+			<div class="panel panel-default">
+				<div class="panel-heading">BREAKING NEWS CAMPAIGNS <small>(LAST 30 DAYS)</small></div>							
+				<div class="panel-body" style="text-align:center;">
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">OPENS</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.breaking_news.opens) %> Opens / <%= window.numberWithCommas(rates.breaking_news.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.breaking_news.open_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">UNSUBSCRIBES</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.breaking_news.unsubscribes) %> Unsubs / <%= window.numberWithCommas(rates.breaking_news.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.breaking_news.unsubscribe_rate.toFixed(2) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK THRU</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.breaking_news.clicks) %> Clicks / <%= window.numberWithCommas(rates.breaking_news.delivered) %> Delivered " style="margin-top:0;">
+							<%= rates.breaking_news.click_thru_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK TO OPEN</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.breaking_news.clicks) %> Clicks / <%= window.numberWithCommas(rates.breaking_news.opens) %> Opens" style="margin-top:0;">
+							<%= rates.breaking_news.click_to_open_rate.toFixed(1) %>%
+						</h2>						
+					</div>		
+				</div>
+			</div>
+		</div>
+<% } %>
+
+<% if("my_alerts" in rates){ %>
+		<div class="col-lg-8 col-md-8" style="padding:0;">
+			<div class="panel panel-default">
+				<div class="panel-heading">MY ALERTS <small>(LAST 30 DAYS)</small></div>							
+				<div class="panel-body" style="text-align:center;">
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">OPENS</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.my_alerts.opens) %> Opens / <%= window.numberWithCommas(rates.my_alerts.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.my_alerts.open_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">UNSUBSCRIBES</p>
+						<h4 class="text-primary"  style="margin-top:16px;">
+							N/A
+						</h4>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK THRU</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.my_alerts.clicks) %> Clicks / <%= window.numberWithCommas(rates.my_alerts.delivered) %> Delivered " style="margin-top:0;">
+							<%= rates.my_alerts.click_thru_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK TO OPEN</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.my_alerts.clicks) %> Clicks / <%= window.numberWithCommas(rates.my_alerts.opens) %> Opens" style="margin-top:0;">
+							<%= rates.my_alerts.click_to_open_rate.toFixed(1) %>%
+						</h2>						
+					</div>		
+				</div>
+			</div>
+		</div>
+<% } %>
+
+<% if("email_this" in rates){ %>
+		<div class="col-lg-8 col-md-8" style="padding:0;">
+			<div class="panel panel-default">
+				<div class="panel-heading">EMAIL THIS ARTICLE <small>(LAST 30 DAYS)</small></div>							
+				<div class="panel-body" style="text-align:center;">
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">OPENS</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.email_this.opens) %> Opens / <%= window.numberWithCommas(rates.email_this.delivered) %> Delivered" style="margin-top:0;">
+							<%= rates.email_this.open_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">UNSUBSCRIBES</p>
+						<h4 class="text-primary"  style="margin-top:16px;">
+							N/A
+						</h4>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK THRU</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.email_this.clicks) %> Clicks / <%= window.numberWithCommas(rates.email_this.delivered) %> Delivered " style="margin-top:0;">
+							<%= rates.email_this.click_thru_rate.toFixed(1) %>%
+						</h2>						
+					</div>
+					
+					<div class="col-lg-3 col-md-3">
+						<p class="text-muted">CLICK TO OPEN</p>
+						<h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.email_this.clicks) %> Clicks / <%= window.numberWithCommas(rates.email_this.opens) %> Opens" style="margin-top:0;">
+							<%= rates.email_this.click_to_open_rate.toFixed(1) %>%
+						</h2>						
+					</div>		
+				</div>
+			</div>
+		</div>
+<% } %>				
+
+<% if("ecomm" in rates){ %>
+        <div class="col-lg-8 col-md-8" style="padding:0;">
+            <div class="panel panel-default">
+                <div class="panel-heading">ECOMMERCE TRANSACTIONAL EMAILS <small>(LAST 30 DAYS)</small></div>
+                <div class="panel-body" style="text-align:center;">
+                    <div class="col-lg-3 col-md-3">
+                        <p class="text-muted">OPENS</p>
+                        <h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.ecomm.opens) %> Opens / <%= window.numberWithCommas(rates.ecomm.delivered) %> Delivered" style="margin-top:0;">
+                            <%= rates.ecomm.open_rate.toFixed(1) %>%
+                        </h2>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+                        <p class="text-muted">UNSUBSCRIBES</p>
+                        <h4 class="text-primary" style="margin-top:0;">
+                           N/A 
+                        </h4>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+                        <p class="text-muted">CLICK THRU</p>
+                        <h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.ecomm.clicks) %> Clicks / <%= window.numberWithCommas(rates.ecomm.delivered) %> Delivered " style="margin-top:0;">
+                            <%= rates.ecomm.click_thru_rate.toFixed(1) %>%
+                        </h2>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+                        <p class="text-muted">CLICK TO OPEN</p>
+                        <h2 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.ecomm.clicks) %> Clicks / <%= window.numberWithCommas(rates.ecomm.opens) %> Opens" style="margin-top:0;">
+                            <%= rates.ecomm.click_to_open_rate.toFixed(1) %>%
+                        </h2>
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <hr style="margin-top:0;margin-bottom:0;"/>
+                    
+                    <h6 class="text-muted" style="margin-bottom:10px;margin-top:5px;">GRACE PERIOD</h6>
+                      <div class="col-lg-3 col-md-3">                                                        
+                      <p class="text-muted">OPENS</p>                                                    
+                      <h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.ecomm_grace_period.opens) %> Opens / <%= window.numberWithCommas(rates.ecomm_grace_period.delivered) %> Delivered" style="margin-top:0;">                                             
+                       <%= rates.ecomm_grace_period.open_rate.toFixed(1) %>%
+                        </h4>
+                    </div>   
+
+                 <div class="col-lg-3 col-md-3">                                                        
+                    <p class="text-muted">UNSUBSCRIBES</p>                                             
+                    <h4 class="text-primary" style="margin-top:0;">
+                        N/A
+                        </h4>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3">
+                        <p class="text-muted">CLICK THRU</p>
+                        <h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.ecomm_grace_period.clicks) %> Clicks / <%= window.numberWithCommas(rates.ecomm_grace_period.delivered) %> Delivered " style="margin-top:0;">
+                            <%= rates.ecomm_grace_period.click_thru_rate.toFixed(1) %>%
+                        </h4>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <p class="text-muted">CLICK TO OPEN</p>
+                        <h4 class="text-primary has-tip" title="<%= window.numberWithCommas(rates.ecomm_grace_period.clicks) %> Clicks / <%= window.numberWithCommas(rates.ecomm_grace_period.opens) %> Opens" style="margin-top:0;">
+                            <%= rates.ecomm_grace_period.click_to_open_rate.toFixed(1) %>%
+                        </h4>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+<% } %>
+					
+	</div>
+</div>
+
+<div class="col-lg-3 col-md-3">
+	<div class="panel panel-default">
+		<div class="panel-heading">HELPFUL LINKS</div>
+		<div class="panel-body">
+			<ul>
+				<li>
+					<a href="https://confluence.em.nytimes.com/pages/viewpage.action?pageId=19106811" target="_blank">
+						Request Access to Paperboy
+					</a>				
+				</li>
+				<li>
+					<a href="https://confluence.em.nytimes.com/display/EML/E-mails+by+Product+Owner" target="_blank">
+						Email Products
+					</a>				
+				</li>
+				<li>
+					<a href="https://confluence.em.nytimes.com/display/SB/Paperboy+Template+Editing" target="_blank">
+						How To Create a New Template
+					</a>				
+				</li>
+				<li>
+					<a href="https://jira.em.nytimes.com/secure/RapidBoard.jspa?rapidView=35&view=planning" target="_blank">
+						File a Bug in Jira
+					</a>				
+				</li>
+				<li>
+					<a href="https://confluence.em.nytimes.com/display/EML/E-Mail+Product+Group" target="_blank">
+						Contact the Email Team
+					</a>				
+				</li>												
+			</ul>
+		</div>
+	</div>
+</div>

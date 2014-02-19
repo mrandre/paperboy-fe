@@ -1,0 +1,275 @@
+<h4>BULK PERFORMANCE REPORT <span id="expandForm" style="display:none;cursor:pointer;" class="toggle-form glyphicon glyphicon-expand" title="click to expand form"></span><span id="collapseForm" style="cursor:pointer;" class="toggle-form glyphicon glyphicon-collapse-down" title="click to collapse form"></span></h4>
+<div class="form-container panel-collapse collapse in">
+<form class="form-horizontal report-form" role="form" id="reportForm">
+    <div class="form-group">
+        <label for="searchType" class="col-sm-2 control-label">FILTER BY</label>
+        <div class="col-sm-10">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary <% if(type == 'product' || !type){ %>active<%}%>">
+                    <input type="radio" name="type" id="search-product" value="product"
+                        <% if(type == 'product' || !type){ %>checked<%}%>>PRODUCT</input>
+                </label>
+                <label class="btn btn-primary <% if(type == 'campaign'){ %>active<%}%>">
+                    <input type="radio" name="type" id="search-campaign" value="campaign"
+                        <% if(type == 'campaign'){ %>checked<%}%>>CAMPAIGN</input>
+                </label>
+                <label class="btn btn-primary <% if(type == 'campaign-type'){ %>active<%}%>">
+                    <input type="radio" name="type" id="search-campaign-type" value="campaign-type"
+                        <% if(type == 'campaign-type'){ %>checked<%}%>>CAMPAIGN TYPE</input>
+                </label>
+                <label class="btn btn-primary <% if(type == 'none'){ %>active<%}%>">
+                    <input type="radio" name="type" id="search-none" value="none"
+                        <% if(type == 'none'){ %>checked<%}%>>NONE</input>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="product-field" <% if(type != 'product' && type){%>style="display:none;"<%}%> >
+        <label for="campaign" class="col-sm-2 control-label">EMAIL PRODUCT</label>
+        <div class="col-sm-10">
+            <select name="productCode" id="productCode" style="width:400px" multiple>
+                <option></option>
+                <% _.each(products.models, function(product){
+                    var selected = "";
+                    var codes = [];
+                    if(type == 'product'){
+                        codes = query.split(',');
+                    }
+                    _.each(codes, function(code) {
+                        if(product.attributes.code == code){
+                            selected = "selected";
+                        }
+                    });
+                %>
+                <option value="<%= product.attributes.code %>" <%= selected %>>
+                    <%= product.attributes.name %> (<%= product.attributes.code %>)
+                </option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group" id="campaign-type-field" <% if(type != 'campaign-type'){%>style="display:none;"<%}%> >
+        <label for="campaign-type" class="col-sm-2 control-label">CAMPAIGN TYPE</label>
+        <div class="col-sm-10">
+            <select name="campaignType" id="campaignType" style="width:200px"  class="form-control">
+                <%  
+                var campTypeId = "";
+                if(type == 'campaign-type'){
+                    campTypeId = query;   
+                }
+                _.each(campaignTypes.attributes, function(campType){ 
+                    var selected = "";
+                    if(campTypeId == campType.id){ selected = 'selected'; } %>
+                <option value="<%= campType.id %>" <%= selected %>>
+                    <%= campType.name %>
+                </option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group" id="campaign-field" <% if(type != 'campaign'){%>style="display:none;"<%}%> >
+        <label for="campaign" class="col-sm-2 control-label">CAMPAIGN NAME</label>
+        <div class="col-sm-10">
+            <input type="hidden" name="campaign" id="campaign" style="width:400px" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="startDate" class="col-sm-2 control-label">START DATE</label>
+        <div class="col-sm-10">
+            <input name="startDate" id="startDate" value="<%= start %>" size="10" placeholder="YYYY-MM-DD" required/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="endDate" class="col-sm-2 control-label">END DATE</label>
+        <div class="col-sm-10">
+            <input name="endDate" id="endDate" value="<%= end %>" size="10" placeholder="YYYY-MM-DD" required/>
+        </div>
+    </div>    
+    <div class="form-group">
+        <label for="totals-only" class="col-sm-2 control-label">TOTALS ONLY</label>
+        <div class="col-sm-10">
+            <input type="checkbox" name="totalsOnly" id="totalsOnly" <% if(totalsOnly){ %>checked<%}%>>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">RUN</button>
+        </div>
+    </div>
+</form>
+</div>
+<% if(results.attributes.instances) { %>
+<form class="report-form report-options" role="form">
+    <div class="form-group" style="float:left;margin-left:155px;">
+        <label for="display-chart" class="control-label">DISPLAY ADD'L. COLUMNS</label>
+        <div class="">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary">
+                    <input type="checkbox" id="toggle-delivery" class="toggle-cols" data-cols="4,5,8,9,10,11"/>DELIVERY
+                </label>
+                <label class="btn btn-primary">
+                    <input type="checkbox" id="toggle-clicks" class="toggle-cols" data-cols="12,14,16,17,18,19,20"/>BEHAVIOR
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" style="float:right;margin-right:80px;">
+        <label for="display-chart" class="control-label">DISPLAY CHART</label>
+        <div class="">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary chart-btn">
+                    <input type="checkbox" name="charts" class="toggle-chart" value="delivery"/>DELIVERY
+                </label>
+                <label class="btn btn-primary chart-btn">
+                    <input type="checkbox" name="charts" class="toggle-chart" value="clicks"/>CLICKS
+                </label>
+                <label class="btn btn-primary chart-btn">
+                    <input type="checkbox" name="charts" class="toggle-chart" value="ctr"/>CLICK THRU
+                </label>
+                <label class="btn btn-primary chart-btn">
+                    <input type="checkbox" name="charts" class="toggle-chart" value="opens"/>OPENS
+                </label>
+                <label class="btn btn-primary chart-btn">
+                    <input type="checkbox" name="charts" class="toggle-chart" value="openrate"/>OPEN RATE
+                </label>
+                <label class="btn btn-primary chart-btn">
+                    <input type="checkbox" name="charts" class="toggle-chart" value="cto"/>CLICK TO OPEN
+                </label>
+                <label class="btn btn-primary chart-btn">
+                    <input type="checkbox" name="charts" class="toggle-chart" value="unsubrate"/>UNSUB RATE
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</form>
+<div id="delivery-chart" class="report-zoom-chart"  style="display:none;"></div>
+<div id="clicks-chart" style="display:none;"></div>
+<div id="ctr-chart" style="display:none;"></div>
+<div id="opens-chart" style="display:none;"></div>
+<div id="openrate-chart" style="display:none;"></div>
+<div id="cto-chart" style="display:none;"></div>
+<div id="unsubrate-chart" style="display:none;"></div>
+<div id="result-list" class="table-responsive">
+    <table id="result-table" class="table">
+        <thead>
+            <tr class="even">
+                <th class="text-muted">SEGMENT(S)</th>
+                <th class="text-muted">PRODUCT</th>
+                <th class="text-muted">CAMPAIGN</th>
+                <th class="text-muted">DATE</th>
+                <th class="text-muted">SEND DAY</th>
+                <th class="text-muted">ATTEMPTED</th>
+                <th class="text-muted">DELIVERED</th>
+                <th class="text-muted">DELIVERY RATE %</th>
+                <th class="text-muted">BOUNCED</th>
+                <th class="text-muted">BOUNCED MAILBOX</th>
+                <th class="text-muted">BOUNCED DOMAIN</th>
+                <th class="text-muted">BOUNCED UNKNOWN</th>
+                <th class="text-muted">OPENS</th>
+                <th class="text-muted">OPEN RATE %</th>
+                <th class="text-muted">CLICKS</th>
+                <th class="text-muted">CLICK THRU %</th>
+                <th class="text-muted">CLICK TO OPEN %</th>
+                <th class="text-muted">UNIQUE CLICKS</th>
+                <th class="text-muted">UNIQUE CLICK THRU %</th>
+                <th class="text-muted">UNIQUE CLICK TO OPEN %</th>
+                <th class="text-muted">UNSUBS</th>
+                <th class="text-muted">UNSUB RATE %</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% var icount = 0; var rowcount = 0; _.each(results.attributes.instances,function(result){ 
+            icount++; 
+            rowcount++;
+            var stripe = "odd-row";
+            if((icount % 2) == 0){ stripe = "even"; }
+            %>
+            <tr id="instance-<%= result.id %>" data-row="<%= rowcount %>" class="<%= stripe %>">
+                <td class="instance-row" style="cursor:pointer;" data-id="<%= result.id %>">
+                    <span class="toggle-instance-<%= result.id %> glyphicon glyphicon-expand" title="click to view segments"></span>
+                    <span class="toggle-instance-<%= result.id %> glyphicon glyphicon-collapse-down" style="display:none" title="click to hide segments"></span>
+                </td>
+                <td><%= result.product_name %></td>
+                <td><%= result.campaign_name %></td>
+                <td><%= window.formatDate(result.start) %></td>
+                <td><%= window.dayOfWeek(result.day_of_week) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.attempted) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.delivered) %></td>
+                <td class="numeric"><%= result.report.delivery_rate.toFixed(2) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.bounced) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.bounced_mailbox) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.bounced_domain) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.bounced_unknown) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.opens) %></td>
+                <td class="numeric"><%= result.report.open_rate.toFixed(2) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.clicks) %></td>
+                <td class="numeric"><%= result.report.click_thru_rate.toFixed(2)  %></td>
+                <td class="numeric"><%= result.report.click_to_open_rate.toFixed(2) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.unique_clicks) %></td>
+                <td class="numeric"><%= result.report.unique_click_thru_rate.toFixed(2) %></td>
+                <td class="numeric"><%= result.report.unique_click_to_open_rate.toFixed(2) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.report.unsubscribes) %></td>
+                <td class="numeric"><%= result.report.unsubscribe_rate.toFixed(2)  %></td>
+            </tr>
+                <% var scount = 0; _.each(result.segments, function(seg){ 
+                scount++;
+                rowcount++;
+                var sstripe = "odd-row";
+                if((scount % 2) == 1){ sstripe = "even"; }
+                %>
+                <tr class="instance-<%= result.id %> panel-collapse collapse <%= sstripe %>">
+                        <td><%= seg.index %></td>
+                        <td class="text-muted" style"font-weight:bold;">AUDIENCE:</td>
+                        <td><a href="/audiences/edit/<%= seg.audience_id  %>" target="_blank"><%= seg.audience_name %></a></td>
+                        <td><a href="/campaign_instances/visualizeLinks/_/<%= seg.id %>" target="_blank" >CLICK MAP</a></td>
+                        <td>&nbsp;</td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.attempted) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.delivered) %></td>
+                        <td class="numeric"><%= seg.report.delivery_rate.toFixed(2) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.bounced) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.bounced_mailbox) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.bounced_domain) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.bounced_unknown) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.opens) %></td>
+                        <td class="numeric"><%= seg.report.open_rate.toFixed(2) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.clicks) %></td>
+                        <td class="numeric"><%= seg.report.click_thru_rate.toFixed(2)  %></td>
+                        <td class="numeric"><%= seg.report.click_to_open_rate.toFixed(2) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.unique_clicks) %></td>
+                        <td class="numeric"><%= seg.report.unique_click_thru_rate.toFixed(2) %></td>
+                        <td class="numeric"><%= seg.report.unique_click_to_open_rate.toFixed(2) %></td>
+                        <td class="numeric"><%= window.numberWithCommas(seg.report.unsubscribes) %></td>
+                        <td class="numeric"><%= seg.report.unsubscribe_rate.toFixed(2)  %></td>
+                    </tr> 
+                <% }); %>
+            <% }); %>
+            <tr class="totals-row">
+                <td>TOTALS</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.attempted) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.delivered) %></td>
+                <td class="numeric"><%= results.attributes.report.delivery_rate.toFixed(2) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.bounced) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.bounced_mailbox) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.bounced_domain) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.bounced_unknown) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.opens) %></td>
+                <td class="numeric"><%= results.attributes.report.open_rate.toFixed(2) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.clicks) %></td>
+                <td class="numeric"><%= results.attributes.report.click_thru_rate.toFixed(2)  %></td>
+                <td class="numeric"><%= results.attributes.report.click_to_open_rate.toFixed(2) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.unique_clicks) %></td>
+                <td class="numeric"><%= results.attributes.report.unique_click_thru_rate.toFixed(2) %></td>
+                <td class="numeric"><%= results.attributes.report.unique_click_to_open_rate.toFixed(2) %></td>
+                <td class="numeric"><%= window.numberWithCommas(results.attributes.report.unsubscribes) %></td>
+                <td class="numeric"><%= results.attributes.report.unsubscribe_rate.toFixed(2)  %></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<% } %>

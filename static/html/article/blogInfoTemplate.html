@@ -1,0 +1,34 @@
+ <div class="nyt-listing">
+   <a href="#/articles/blog/<%= id %>" class="nyt-headline nyt-big"> 
+   <%= id %>
+ 	</a> 
+
+<% 	if($('#sort').val() == 'clicks'){ %>
+ <!-- duplicate #s for alternate sort -->
+ <p class="nyt-summary clicks"> 
+	 <span class="at-click-total"> <%= window.numberWithCommas(total_clicks) %></span> clicks and 
+	 <span class="at-click-total"> <%= window.numberWithCommas(unique_clicks) %></span> unique clicks
+ 	from
+ 	<span class="at-click-total"><%= window.numberWithCommas(article_count) %></span> articles		
+ </p> 
+ <p class="nyt-byline clicks">
+  <%= window.numberWithCommas(rate.toFixed(0)) %> clicks per article
+ </p>
+ 
+ <% } else { %>
+ 
+ <!-- duplicate #s for alternate sort -->
+ <p class="nyt-summary rate">
+  <span class="at-click-total"><%= window.numberWithCommas(rate.toFixed(0)) %></span> 
+  clicks per article
+ </p>		 
+ <p class="nyt-byline rate"> 
+	 <%= window.numberWithCommas(total_clicks) %> clicks and 
+	 <%= window.numberWithCommas(unique_clicks) %> unique clicks
+ 	from
+ 	<%= window.numberWithCommas(article_count) %> articles			
+ </p> 	 
+ 
+ <% } %>
+ 
+ </div> 

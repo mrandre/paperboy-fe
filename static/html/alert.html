@@ -1,0 +1,76 @@
+<tr style="display:none;">
+    <td colspan="5">
+        <div class="alert-details">
+            <span class="label label-info">ALERT LOGIC</span>
+            <% _.each(alert.topics, function(topic){ %>
+            <ul class="list-unstyled">
+                <li><b>Topic:</b> <span><%= topic.value %></span></li>
+                <li><b>Logic:</b> <span><%= topic.logic %></span></li>
+            </ul>
+            <% }) %>
+            <% _.each(alert.inputs, function(input){ %>
+            <ul class="list-unstyled">
+                <li><b>Keyword(s):</b> <span><%= input.value %></span></li>
+                <li><b>Logic:</b> <span><%= input.logic %></span></li>
+                <%
+                    var input_field = "Any";
+                    if(input.field == "h"){
+                        input_field = "Headline";
+                    }
+                    else if(input.field == "b"){
+                        input_field = "Byline";
+                    }
+                %>
+                <li><b>Field(s):</b> <span><%= input_field %></span></li>
+            </ul>
+            <% }) %>
+            <% if(alert.sections){ %>
+            <ul class="list-unstyled">
+                <li><b>Sections:</b> 
+
+                <span><%= _.reduce(
+                                alert.sections, 
+                                function(total, next){ var c=", "; if(!total.length){c="";} return total += c + next.name ; }, 
+                                "") %></span></li>
+            </ul>
+            <% } %>
+            <% _.each(alert.tickers, function(ticker){ %>
+            <ul class="list-unstyled">
+                <li><b>Ticker:</b> <span><%= ticker.name %></span></li>
+                <li><b>Logic:</b> <span><%= ticker.logic %></span></li>
+            </ul>
+            <% }) %>
+        </div>
+        <div class="alert-details">
+            <span class="label label-info">ALERT MATCHES</span>
+            <% if(!matches) { %>
+                <small class="text-muted">NO MATCHES</small>
+            <% }else { %>
+                <small class="text-muted"><%= matches.length %> MATCHES</small>
+            <% } %>
+            <% _.each(matches, function(match){ %>
+            <ul class="list-unstyled">
+                <li>
+                    <a href="<%= match.url %>" target="_blank" class="nyt-headline"><%= match.headline %></a>
+                </li>
+                <li><% if(!match.sent_time){ %>
+                            <span class="label label-warning">NOT YET SENT</span>
+                        <% }else { %>
+                            <span class="label label-success">SENT</span> <%= match.sent_time.replace(/T/g," (").replace(/Z/g,")") %>
+                        <% } %>
+                </li>
+                <li class="alert-reasons">
+                  <ul class="list-unstyled">
+                  <% for(reason_area in match.reason){  %>
+                    <li><b><%= reason_area %></b></li>
+                    <% _.each(match.reason[reason_area], function(highlight){ %>
+                        <li><%= highlight %></li>
+                    <% }) %>
+                  <% } %>                 
+                  </ul>
+                </li>
+              </ul>
+            <% }) %>
+        </div>
+    </td>
+</tr>                 

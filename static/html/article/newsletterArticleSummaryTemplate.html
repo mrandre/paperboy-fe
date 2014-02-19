@@ -1,0 +1,64 @@
+ <div class="nyt-listing">
+ <h4 class="nyt-kicker">
+  <%= info.kicker %>
+  </h4> 
+ <a href="#/articles/article?url=<%= info.url %>" class="nyt-headline" > 
+ <%= value.info.title %>
+ </a>
+ <% if(value.info.authors.length) { %> 
+ <h4 class="nyt-byline"> 	
+ <%  var count=0; _.each(value.info.authors, function(author){ count++; %>
+		 <a href="#/articles/author/<%= author %>"><%= author %></a> 
+		 <% 
+		 if(value.info.authors.length > 1) {
+			 	if(count == (value.info.authors.length - 1)){ %>
+					 and 
+				 <% } else if(count != value.info.authors.length){ %>
+					 ,
+			<%	}
+	 		}
+		}); %>
+ </h4> 
+ <% } %>
+ 
+ 
+<% 	if($('#sort').val() == 'clicks'){ %>			
+ <!-- duplicate #s for alternate sort -->
+ <p class="nyt-summary"> 
+     <span class="at-click-total"> <%= window.numberWithCommas(value.clicks) %></span> clicks and 
+	 <span class="at-click-total"> <%= window.numberWithCommas(value.unique_clicks) %></span> unique clicks	
+  </p> 
+ <p class="nyt-byline clicks">
+  <%= window.numberWithCommas(value.rate.toFixed(0)) %> clicks per newsletter
+ 
+ <% } else { %>
+ 
+ <!-- duplicate #s for alternate sort -->
+ <p class="nyt-summary ">
+  <span class="at-click-total"><%= window.numberWithCommas(value.rate.toFixed(0)) %></span> 
+  clicks per newsletter
+ </p>		 
+  <p class="nyt-byline rate"> 
+  	<%= window.numberWithCommas(value.clicks) %> clicks and
+  	<%= window.numberWithCommas(value.unique_clicks) %> unique clicks 			
+ 
+ <% } %>
+ 
+ <% if(!('1' in value.segments)){ 
+		 var segment_count = 0;
+		 for(segment in value.segments){
+			 if(value.segments.hasOwnProperty(segment))
+			             ++segment_count;
+		 }
+		  %>
+	    	from <span class="at-click-total"> <%= segment_count %></span> segment(s):
+		 </p>    				 
+			 <%	for(segment in value.segments){ %>
+				  <p class="nyt-summary"> 
+		 				<a title="View CLICK MAP in Paperboy!" href="/campaign_instances/visualizeLinks/_/<%= segment %>"  class="" target="_blank"> <% var date = value.segments[segment].split('T')[0]; %><%= date %> </a>
+				 </p>
+		 	<% } 
+		} else { %>
+		</p> 
+	 <%	} %>
+ </div>

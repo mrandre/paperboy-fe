@@ -1,0 +1,92 @@
+<h4>SUBSCRIBER ACQUISITIONS <span id="expandForm" style="display:none;cursor:pointer;" class="toggle-form glyphicon glyphicon-expand" title="click to expand form"></span><span id="collapseForm" style="cursor:pointer;" class="toggle-form glyphicon glyphicon-collapse-down" title="click to collapse form"></span></h4>
+<div class="form-container panel-collapse collapse in">
+<form class="form-horizontal report-form" role="form" id="reportForm">
+    <div class="form-group">
+        <label for="productCode" class="col-sm-2 control-label">EMAIL PRODUCT</label>
+        <div class="col-sm-10">
+            <select name="productCode" id="productCode" style="width:400px" multiple>
+                <option></option>
+                <% _.each(products.models, function(product){ 
+                    var selected = "";
+                    _.each(productCodes, function(code) {
+                        if(product.attributes.code == code){
+                            selected = "selected";
+                        }
+                    });
+                %>
+                <option value="<%= product.attributes.code %>" <%= selected %>>
+                    <%= product.attributes.name %> (<%= product.attributes.code %>)
+                </option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="startDate" class="col-sm-2 control-label">START DATE</label>
+        <div class="col-sm-10">
+            <input name="startDate" id="startDate" value="<%= start %>" size="10" placeholder="YYYY-MM-DD" required/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="endDate" class="col-sm-2 control-label">END DATE</label>
+        <div class="col-sm-10">
+            <input name="endDate" id="endDate" value="<%= end %>" size="10" placeholder="YYYY-MM-DD" required/>
+        </div>
+    </div>    
+    <div class="form-group">
+        <label for="interval" class="col-sm-2 control-label">INTERVAL</label>
+        <div class="col-sm-10">
+            <div class="btn-group" data-toggle="buttons"> 
+                <label class="btn btn-primary <% if(interval == 'daily'){ %>active<%}%>">
+                    <input type="radio" name="interval" id="interval-daily" value="daily" 
+                        <% if(interval == 'daily'){ %>checked<%}%>>DAILY</input>
+                </label>
+                <label class="btn btn-primary <% if(interval == 'weekly'){ %>active<%}%>">
+                    <input type="radio" name="interval" id="interval-weekly" value="weekly"
+                        <% if(interval == 'weekly'){ %>checked<%}%>>WEEKLY</input>
+                </label>
+                <label class="btn btn-primary <% if(interval == 'monthly' || !interval){ %>active<%}%>">
+                    <input type="radio" name="interval" id="interval-monthly" value="monthly"
+                        <% if(interval == 'monthly' || !interval){ %>checked<%}%>>MONTHLY</input>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">RUN</button>
+        </div>
+    </div>
+</form>
+</div>
+<div id="result-chart" class="col-lg-12" style="display:none">
+</div>
+<div id="result-list" class="col-lg-12" style="min-height:200px;">
+    <table class="table table-striped" style="display:none;">
+        <thead>
+            <tr>
+                <th class="text-muted">PRODUCT</th>
+                <th class="text-muted">INTERVAL</th>
+                <th class="text-muted">START DATE</th>
+                <th class="text-muted">END DATE</th>
+                <th class="text-muted">START COUNT</th>
+                <th class="text-muted">END COUNT</th>
+                <th class="text-muted">ACQUISITION</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(results.models,function(result){ %>
+            <tr>
+                <td><%= result.attributes.product %></td>
+                <td><%= result.attributes.interval %></td>
+                <td><%= window.formatDate(result.attributes.start_date) %></td>
+                <td><%= window.formatDate(result.attributes.end_date) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.attributes.start) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.attributes.end) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.attributes.diff) %></td
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</divwindow.formatDate(>

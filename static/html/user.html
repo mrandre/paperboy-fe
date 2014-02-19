@@ -1,0 +1,357 @@
+<div class="col-lg-12">
+	<a href="#/users" style="padding-top:5px;font-size:0.8em;"><span class="glyphicon glyphicon-search" style="padding-right:5px;"></span>BACK TO SEARCH</a>
+	<div id="user-basic" style="font-size:1.5em;">
+		<h2><%= email %> </h2>
+		
+		<div class="col-lg-3" style="padding-left:0;margin:0;">
+			<p class="text-muted" style="padding-left:0; margin:0;"><strong>CURRENT STATUS</strong></p>
+			<% 
+				var curr_status = "N/A";
+				if(current_status){
+					curr_status = current_status.toUpperCase();
+				}
+				
+				function getStatusClass(status) {
+					var curr_class = '';
+					if(status == 'CONFIRMED') {
+						curr_class = 'text-success';
+					} else if (status == 'BOUNCED') {
+						curr_class = 'text-danger';
+					} else {
+						curr_class = 'text-warning';
+					}		
+				
+					return curr_class;
+				}
+				
+				var curr_class = getStatusClass(curr_status);
+				
+			%> 		
+			<p class="<%= curr_class %>"><strong><%= curr_status %></strong></p>
+		</div>
+		
+		<div class="col-lg-3" style="padding-left:0;">
+			<p class="text-muted" style="padding-left:0; margin:0;"><strong>DELIVERY RATE</strong></p>	
+			<% 
+			var d_rate = 0;
+			var rate_class = 'text-warning';
+			if(email_history){
+				var d_count = 0;
+				_.each(email_history,function(hist){
+					if( hist.result.toUpperCase() == 'DELIVERED'){
+						d_count++;
+					}
+				});
+				d_rate = ((d_count / email_history.length) * 100).toFixed(1);
+				
+				if(d_rate > 95) {
+					rate_class = 'text-success';
+				} else if (d_rate > 75) {
+					rate_class = 'text-warning';
+				} else {
+					rate_class = 'text-danger';
+				}
+				
+				d_rate += '%';
+			} 
+			else {
+				d_rate = 'N/A';
+			}
+			
+			%>		
+			<p class="<%= rate_class %> "><strong><%= d_rate %></strong></p>
+		</div>
+	
+		<div class="col-lg-2" style="padding-left:0;">
+			<p class="text-muted" style="padding-left:0; margin:0;"><strong>REGI ID</strong></p>	
+			<% 
+				var regi = "N/A";
+				if(regi_id > 0){
+					regi = regi_id;
+				} 
+			%>		
+			<p><strong><%= regi %></strong></p>
+		</div>
+		<div class="clearfix">&nbsp;</div>		
+	</div>
+	<div id="user-status-history" class="col-lg-5" style="padding-left:0;">
+		<h5 class="text-muted">STATUS HISTORY</h5>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th class="text-muted">
+						STATUS
+					</th>
+					<th class="text-muted">
+						DATE
+					</th>
+					<th class="text-muted has-tip" title="The initials or name of the actor who changed the email status.">
+						SOURCE
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% _.each(status_history, function(status_record){ %>
+					<tr>
+						<td class="<%= getStatusClass(status_record.action.toUpperCase()) %>">
+							<%= status_record.action.toUpperCase() %>
+						</td>
+						<td>
+							<%= status_record.action_date %>
+						</td>
+						<td>
+							<%= status_record.source %>
+						</td>
+					</tr>
+				<% }); %>
+			</tbody>
+			<% if(!status_history) { %>
+				<tfoot>
+					<tr>
+						<td colspan="3" style="text-align:center;">
+							<small class="text-muted">NO HISTORY</small>
+						</td>
+					</tr>
+				<tfoot>		
+			<% } %>
+		</table>
+	</div>
+	<div style="padding-left:0;" class="col-lg-7">
+		<h5 class="text-muted">MY ALERTS</h5>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+                    <th>&nbsp;</th>
+					<th class="text-muted">
+						NAME
+					</th>
+					<th class="text-muted">
+						STATUS
+					</th>
+					<th class="text-muted">
+						CREATED
+					</th>
+					<th class="text-muted">
+						UPDATED
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% _.each(alerts, function(alert){ %>
+                    <tr class="alert-row" title="click to see more alert info" data-alert-id="<%= alert.id %>">
+                        <td>
+                            <span class="glyphicon glyphicon-expand"></span>
+                        </td>
+						<td>
+							<%= alert.name %>
+						</td>
+						<td>
+							<%= alert.status %>
+						</td>
+						<td>
+							<%= alert.created %>
+						</td>
+						<td>
+							<%= alert.last_updated %>
+						</td>
+					</tr>
+				<% }); %>
+			</tbody>
+			<% if(!alerts){%>
+				<tfoot>
+					<tr>
+						<td colspan="4" style="text-align:center;">
+							<small class="text-muted">NO ALERTS</small>
+						</td>
+					</tr>					
+				</tfoot>
+			<% } %>				
+		</table>
+	</div>
+	
+	<div class="clearfix">&nbsp;</div>
+	<hr style="margin-top:-20px;"/>
+	
+	<div id="user-subscriptions" class="col-lg-12" style="padding:0 0 0 0;">
+		<% var prod_count = 0; if(subscribed_products){ prod_count = subscribed_products.length; } %>
+		<h5 class="text-muted">SUBSCRIBED EMAIL PRODUCTS&nbsp;<small>(<%= prod_count %>)</small></h5>
+		<ul class="list-unstyled">
+
+			<% var product_map = {}; 
+			  _.each(subscribed_products, function(product){ 
+				  product_map[product.code] = product.name;
+		    %>
+			<li class="col-lg-4">
+				<span class="">
+					<%= product.name %> <small class="has-tip" title="Email Product Code">(<%= product.code %>)</small>
+				</span>
+			</li>			
+			<% }); %>			
+			<% if(!subscribed_products){ %>
+				<li class="">
+					<small class="text-muted">NO SUBSCRIPTIONS</small>
+				</li>				
+			<% } %>			
+		</ul>		
+	</div>
+	<div  class="clearfix">&nbsp;</div>
+	<hr style=""/>
+	
+	<div id="user-email-history" class="col-lg-12" style="padding-left:0;">
+		<%
+		var emails = 0;
+		if(email_history){
+			emails = email_history.length;
+		}
+		%>
+		<h5 class="text-muted">EMAIL HISTORY <small>(<strong><%= emails %></strong> emails from the past 7 days)</small></h5>
+		<div class="table-responsive">
+		<table id="history-table" class="table table-striped">
+			<thead>
+				<tr>
+					<th class="text-muted has-tip" title="Was the email 'delivered' or 'bounced' (not delivered)">
+						RESULT
+					</th>
+					<th class="text-muted has-tip" title="The date and time email was sent">
+						TIMESTAMP
+					</th>					
+					<th class="text-muted has-tip" title="This is the job-id from the email header. The text before the dash should be the 'product code' for bulk emails or the 'email type' of transactional mail.">
+						JOB ID
+					</th>
+					<th class="text-muted has-tip" title="The Campaign ID of a bulk email from Paperboy. Click to the link view data in Paperboy.">
+						CAMPAIGN
+					</th>
+					<th class="text-muted has-tip" title="The Campaign Instance ID of a bulk email from Paperboy. Click to the link view data in Paperboy.">
+						INSTANCE
+					</th>
+					<th class="text-muted has-tip" title="The Campaign Instance Segment ID of a bulk email. Click to the link view data in Paperboy.">
+						SEGMENT
+					</th>									
+					<th class="text-muted has-tip" title="For transactional emails only. The 'email type' is the name of the email template sent.">
+						EMAIL TYPE
+					</th>
+					<th class="text-muted has-tip" title="If an email bounced, the 'bounce category' is what the PMTA servers have determined was the cause.">
+						BOUNCE CATEGORY
+					</th>
+					<th class="text-muted has-tip" title="DSN (Delivery Status Notification) message from the recipient MTA servers. Helpful for troubleshooting ESP problems.">
+						DSN DIALOG
+					</th>
+					<th class="text-muted has-tip" title="DSN (Delivery Status Notification) status from the recipient MTA servers. Helpful for troubleshooting ESP problems.">
+						DSN STATUS
+					</th>	
+					<th class="text-muted has-tip" title="The IP address of our PMTA server that sent the mail.">
+						MTA
+					</th>																														
+				</tr>
+			</thead>
+			<tfoot>
+					<% if(!email_history){ %>
+					<tr >
+						<td colspan="11" class="text-muted" style="text-align:center;">
+							<small>NO EMAILS RECORDED</small>
+						</td>
+					</tr>
+			<% } %>				
+			<tfoot>			
+			<tbody>
+				<% 
+				function getResultClass(result) {
+					var curr_class = '';
+					if(result == 'DELIVERED') {
+						curr_class = 'text-success';
+					} else {
+						curr_class = 'text-danger';
+					} 
+					return curr_class;
+				}
+				function getRowClass(result) {
+					var curr_class = '';
+					if(result != 'DELIVERED') {
+						curr_class = 'danger';
+					}
+					return curr_class;
+				}
+				
+				function createProductTip(job_id) {
+					var tip = "";
+					var job_info = job_id.split('-');
+					if(product_map[job_info[0]]){
+						tip = 'class="has-tip" title="Bulk Newsletter: '+ product_map[job_info[0]] + '"';
+					}
+					return tip;
+				}
+				_.each(email_history, function(hist){  
+					hist.result = hist.result.toUpperCase(); %>
+					<tr class="<%= getRowClass(hist.result) %>">
+						<td class="<%= getResultClass(hist.result) %>">
+							<strong><%= hist.result %></strong>
+						</td>
+						<td>
+							<% var times = hist.timestamp.substring(0,  hist.timestamp.length-5) %>
+							<%= times %>
+						</td>
+						<td <%= createProductTip(hist.job_id) %> >
+							<%= hist.job_id %>
+						</td>
+						<td>
+							<% 
+							var camp_id = 'N/A';
+							if(hist.campaign_id){
+								camp_id = '<a href="/campaigns/edit/' + hist.campaign_id + '" target="_blank">'+hist.campaign_id+'</a>';
+							}					
+							%>
+							<%= camp_id %>
+						</td>
+						<td>
+							<% 
+							var inst_id = 'N/A';
+							if(hist.instance_id){
+								inst_id = '<a href="/campaign_instances/view/' + hist.instance_id + '" target="_blank">'+hist.instance_id+'</a>';
+							}							
+							%>
+							<%= inst_id %>
+						</td>
+						<td>
+							<% 
+							var seg_id = 'N/A';
+							if(hist.segment_id){
+                                seg_id = '<a href="/campaign_instances/visualizeLinks/_/' + hist.segment_id + '" target="_blank">'+hist.segment_id+'</a>';
+							}							
+							%>
+							<%= seg_id %>
+						</td>												
+						<td>
+							<% 
+							var etype = "N/A";
+							if(hist.email_type){
+								etype = hist.email_type;
+							}
+							%>
+							<%= etype %>
+						</td>
+						<td>
+							<% 
+							var bcat = "N/A";
+							if(hist.bounce_category){
+								bcat = hist.bounce_category;
+							}
+							%>
+							<%= bcat %>
+						</td>
+						<td>
+							<%= hist.dsn_dialog %>
+						</td>																								
+						<td>
+							<%= hist.dsn_status %>
+						</td>																								
+
+						<td>
+							<%= hist.source_mta %>
+						</td>						
+					</tr>
+				<% }); %>
+			</tbody>		
+		</table>
+	</div>	
+	</div>	
+</div>

@@ -1,0 +1,28 @@
+<div class="jumbotron" style="text-align:center;">
+	<div class="error" style="display:none;">
+		<p>Paperboy Article Tracker</p>		
+		<p class="text-danger"><strong>Sorry, we did not find any records matching your search.</strong></p>
+		<p style="font-size:0.7em;">Please enter a different value and try again.</p>	
+	</div>
+	<div class="welcome">
+		<p>Welcome to the Paperboy Article Tracker</p>	
+		<p style="font-size:0.7em;">Please enter an author, section, or blog name to get started.</p>
+	</div>
+
+   <form class="form-inline" role="form" action="">
+      <fieldset>
+         <div class="form-group" style="width:100%;">
+            <input type="text" id="query" name="query" style="text-align:center;width:75%" class="input-large search-query" placeholder="AUTHOR / SECTION / BLOG"/>
+			<button type="submit" class="btn btn-defualt btn-lg" style="vertical-align: baseline;" value="">
+			<span class="glyphicon glyphicon-search"></span>
+			</button>
+         </div>
+      </fieldset>
+   </form>
+</div>    
+
+<div class="col-lg-12" id="searchResults" style="display:none;">
+   <h2>Results</h2>
+   <div class="result-list">
+   </div>
+</div>

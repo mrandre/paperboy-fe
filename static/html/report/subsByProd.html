@@ -1,0 +1,65 @@
+<h4>SUBSCRIBERS BY PRODUCT <span id="expandForm" style="display:none;cursor:pointer;" class="toggle-form glyphicon glyphicon-expand" title="click to expand form"></span><span id="collapseForm" style="cursor:pointer;" class="toggle-form glyphicon glyphicon-collapse-down" title="click to collapse form"></span></h4>
+<div class="form-container panel-collapse collapse in">
+<form class="form-horizontal report-form" role="form">
+    <div class="form-group">
+        <label for="productCode" class="col-sm-2 control-label">EMAIL PRODUCT</label>
+        <div class="col-sm-10">
+            <select name="productCode" id="productCode" style="width:400px" multiple>
+                <option></option>
+                <% _.each(products.models, function(product){ 
+                    var selected = "";
+                    _.each(productCodes, function(code) {
+                        if(product.attributes.code == code){
+                            selected = "selected";
+                        }
+                    });
+                %>
+                <option value="<%= product.attributes.code %>" <%= selected %>>
+                    <%= product.attributes.name %> (<%= product.attributes.code %>)
+                </option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="startDate" class="col-sm-2 control-label">START DATE</label>
+        <div class="col-sm-10">
+            <input name="startDate" id="startDate" value="<%= start %>" size="10" placeholder="YYYY-MM-DD" required/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="endDate" class="col-sm-2 control-label">END DATE</label>
+        <div class="col-sm-10">
+            <input name="endDate" id="endDate" value="<%= end %>" size="10" placeholder="YYYY-MM-DD" />
+            <small class="">(optional)</small>
+        </div>
+    </div>    
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">RUN</button>
+        </div>
+    </div>
+</form>
+</div>
+<div id="result-list" class="col-lg-4" style="min-height:200px;">
+    <table class="table table-striped" style="display:none;">
+        <thead>
+            <tr>
+                <th class="text-muted">PRODUCT</th>
+                <th class="text-muted">DATE</th>
+                <th class="text-muted">SUBSCRIBERS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(results.models,function(result){ %>
+            <tr>
+                <td><%= result.attributes.product %></td>
+                <td><%= window.formatDate(result.attributes.date) %></td>
+                <td class="numeric"><%= window.numberWithCommas(result.attributes.count) %></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+<div id="result-chart" class="col-lg-8" style="display:none">
+</div>

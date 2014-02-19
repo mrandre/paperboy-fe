@@ -1,0 +1,11 @@
+<div class="nyt-listing">
+  <a href="#/articles/newsletter/<%= id %>" class="nyt-headline nyt-big"> 
+  <%= cleanNewsletterName(id) %>
+	</a> 
+<p class="nyt-summary"> 
+ <span class="at-click-total"> <%= window.numberWithCommas(total_clicks) %></span> clicks and 
+ <span class="at-click-total"> <%= window.numberWithCommas(unique_clicks) %></span> unique clicks
+	from
+	<span class="at-click-total"><%= window.numberWithCommas(article_count) %></span> articles
+</p> 
+</div>

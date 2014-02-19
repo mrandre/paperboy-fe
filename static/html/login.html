@@ -1,0 +1,18 @@
+<!--[if lt IE 10]>
+<div class="col-lg-12" style="text-align:center">
+    <h4 class="label-warning">You are using an <strong>outdated</strong> browser that will not allow authentication with Paperboy. <br/>
+	Please <a href="http://browsehappy.com/">upgrade your browser</a> to login.</h4>
+</div>
+<![endif]-->
+<form class="form-signin">
+  <h4 class="form-signin-heading">Please login to access Paperboy</h4>
+  <div class="error" style="display:none;">
+  	<p style="font-size:0.8em;" class="text-danger">Please enter a different Regi ID or email address to try again.</p>	
+  </div>
+  <input type="text" class="form-control" name="user_id" id="user_id" placeholder="User ID" required autofocus>
+  <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+  <label class="checkbox">
+    <input type="checkbox" name="remember" id="remember" value="true"> Remember me
+  </label>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+</form>

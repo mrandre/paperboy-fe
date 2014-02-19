@@ -1,0 +1,43 @@
+<div class="row" id="timeframe-container">
+	<form class="form-inline" role="form">
+	   <fieldset>
+	      <div class="form-group">
+	         <label for="timeframe">Time Frame</label>
+	         <select id="timeframe" class="form-control" style="height:30px;">
+	            <option value="12months">Last 12 months</option>
+				<option value="6months">Last 6 months</option>
+	            <option value="3months">Last 3 months</option>
+	            <option value="1week" selected>This Week</option>
+	            <option value="thisMonth">This Month</option>
+				<%
+				var monthNames = [ "Jan", "Feb", "March", "April", "May", "June",
+				    "July", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+	
+				
+				var value = "lastMonth";
+				var dateStr = "";
+				for(var i = 1; i <= 12; i++){ 
+					if(i > 1){
+						value = i +"MonthsAgo";
+					}
+					var dt = new Date();
+					dt.setMonth(dt.getMonth() - i);
+					dateStr = monthNames[dt.getMonth()] + " " + dt.getFullYear();
+				%>
+					<option value="<%= value %>"><%= dateStr %></option>					
+				<% } %>
+	         </select>
+	      </div>
+	      <div class="form-group">
+	         <label for="sort">Sort By</label>
+	         <select id="sort" class="form-control" style="height:30px;">
+	            <option value="clicks">Total Clicks</option>
+				<option value="rate">Click Rate</option>
+	         </select>
+	      </div>
+	   </fieldset>
+	</form>
+</div>
+
+<div id="article-tracker-container" class="role">
+</div>

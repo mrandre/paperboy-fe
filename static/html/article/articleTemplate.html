@@ -1,0 +1,34 @@
+<div class="nyt-listing">
+<h4 class="nyt-kicker">
+ <%= info.kicker %>
+ </h4> 
+<a href="#/articles/article?url=<%= id %>" class="nyt-headline nyt-big" > 
+<%= info.title %>
+</a> 
+<% if(info.authors.length) { %>
+<h4 class="nyt-byline"> 	
+<%  var count=0; _.each(info.authors, function(author){ count++; %>
+	 <a href="#/articles/author/<%= author %>"><%= author %></a> 
+	 <% 
+	 if(info.authors.length > 1) {
+		 	if(count == (info.authors.length - 1)){ %>
+				 and 
+			 <% } else if(count != info.authors.length){ %>
+				 ,
+		<%	}
+ 		}
+	}); %>
+</h4> 
+<% } %>
+<p class="nyt-summary"> 
+    <span class="at-click-total"> <%= window.numberWithCommas(clicks) %></span> clicks and 
+ <span class="at-click-total"> <%= window.numberWithCommas(unique_clicks) %></span> unique clicks
+    from
+    <span class="at-click-total"> <%= window.numberWithCommas(newsletters.length) %></span> newsletters        
+</p> 
+<p class="nyt-summary">
+    <a href="<%= id %>" target="_blank"> 
+ 		view on nytimes.com
+    </a> 
+</p
+</div> 

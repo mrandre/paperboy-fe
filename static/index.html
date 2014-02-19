@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <link rel="shortcut icon" href="<!-- @echo pkg.version -->/ico/favicon.png">
+      <title>Paperboy <!-- @echo version --></title>
+      <link href="<!-- @echo version -->/css/frontend.css" rel="stylesheet">
+      <script>
+        window.version = "<!-- @echo version -->";
+      </script>
+      <script data-main="<!-- @echo version -->/js/main" src="<!-- @echo version -->/js/require.js"></script>
+      <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	  <!--[if lt IE 9]>
+	    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+	  <![endif]-->	  
+   </head>
+   <body>  
+      <div class="container">
+         <div id="content" class="row">
+         </div>
+      </div>
+	  <hr/>
+      <footer>
+      <p>&copy; The New York Times <script>document.write(new Date().getFullYear())</script></p>
+      </footer>
+
+	  <div id="waiting" class="modal fade" style="display:none;" data-backdrop="static" data-keyboard="false">
+		  <div class="modal-dialog">			  
+	          <div class="modal-content">
+                  <div class="spinner">
+                    <div class="dot1"></div>
+                    <div class="dot2"></div>
+                  </div>
+	          </div>
+		  </div>
+      </div>
+   </body>
+</html>

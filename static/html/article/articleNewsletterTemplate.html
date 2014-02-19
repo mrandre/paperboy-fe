@@ -1,0 +1,17 @@
+<div class="nyt-listing">
+  <h4 class="nyt-kicker">
+	  <% var dte = date.split('T')[0];%> <%= dte %>
+  </h4>
+	<% if(segment_id > 1){ %>
+    <a title="View CLICK MAP in Paperboy!" href="/campaign_instances/visualizeLinks/_/<%= segment_id %>"  class="nyt-headline" target="_blank">
+  <% } else { %> 
+    <a href="#/articles/newsletter/<%= type %>" class="nyt-headline"> 				  
+  <% } %>
+ 	    <%= cleanNewsletterName(type) %>
+    </a>
+
+<p class="nyt-summary"> 
+   <span class="at-click-total"> <%= window.numberWithCommas(clicks) %></span> clicks and 
+ <span class="at-click-total"> <%= window.numberWithCommas(unique_clicks) %></span> unique clicks
+</p> 
+</div> 
