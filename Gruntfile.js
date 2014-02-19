@@ -4,6 +4,15 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
 
+        concurrent: {
+            main: {
+                tasks: ['connect', 'watch'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            }
+        },
+
         connect: {
             options: {
                 port: 8080,
@@ -91,5 +100,6 @@ module.exports = function(grunt) {
     grunt.config("version", grunt.option('ver') || "dev"); 
     grunt.registerTask("dev", ["clean", "copy:main", "copy:dev", "preprocess"]);
     grunt.registerTask("build", ["clean", "requirejs", "copy:main", "preprocess"]);
+    grunt.registerTask("server", ["concurrent:main"]);
     grunt.registerTask("default", "build");
 };
